@@ -14,8 +14,15 @@ phonebook_opt: $(SRCS_common) phonebook_opt.c phonebook_opt.h
 	$(CC) $(CFLAGS_common) -DIMPL="\"$@.h\"" -o $@ \
 		$(SRCS_common) $@.c
 
-run: $(EXEC)
+run1: $(EXEC)
 	watch -d -t ./phonebook_orig
-
+run2: $(EXEC)
+	watch -d -t ./phonebook_opt
+static1:
+	echo "echo 1 > /proc/sys/vm/drop_caches" | sudo sh 
+	sudo perf stat -e cache-misses -e cache-references -e instructions -e cycles ./phonebook_orig
+static2:
+	echo "echo 1 > /proc/sys/vm/drop_caches" | sudo sh
+	sudo perf stat -e cache-misses -e cache-references -e instructions -e cycles ./phonebook_opt
 clean:
 	$(RM) $(EXEC) *.o perf.*
