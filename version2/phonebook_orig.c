@@ -39,10 +39,10 @@ entry *initialize(entry *pHead)
 //replace \n with \0
 void addnull(char *line)
 {
-    int i = 0;
-    while (line[i] != '\0')
-        i++;
-    line[i - 1] = '\0';
-    return;
+	int i = 0;
+	while (line[i] != '\0')	
+		i++;
+	line[i - 1] = '\0';
+	return;
 }
 
