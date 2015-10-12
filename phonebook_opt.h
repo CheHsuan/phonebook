@@ -25,8 +25,6 @@ typedef struct HashTable {
     struct __PHONE_BOOK_ENTRY *tail;
 } HashTable;
 
-entry *findName(char lastname[], entry *e);
+entry *findName(char lastname[], HashTable *ht);
 entry *append(char lastName[], HashTable *ht);
-uint16_t hashIndex(char lastName[]);
-
 #endif

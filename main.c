@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     clock_gettime(CLOCK_REALTIME, &start);
     while (fgets(line, sizeof(line), fp)) {
 #if defined(_PHONEBOOK_OPT_H)
-	append(line, ht);
+		append(line, ht);
 #else
         e = append(line, e);
 #endif
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     /* compute the execution time */
     clock_gettime(CLOCK_REALTIME, &start);
 #if defined(_PHONEBOOK_OPT_H)
-    findName(input, ht[hashIndex(input)].head);
+    findName(input, ht);
 #else 
     e = pHead;
 #if defined(__GNUC__)

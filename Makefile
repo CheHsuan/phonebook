@@ -20,9 +20,9 @@ run2: $(EXEC)
 	watch -d -t ./phonebook_opt
 static1:
 	echo "echo 1 > /proc/sys/vm/drop_caches" | sudo sh 
-	sudo perf stat -e cache-misses -e cache-references -e instructions -e cycles ./phonebook_orig
+	sudo perf stat -r 10 -e cache-misses -e cache-references -e instructions -e cycles ./phonebook_orig
 static2:
 	echo "echo 1 > /proc/sys/vm/drop_caches" | sudo sh
-	sudo perf stat -e cache-misses -e cache-references -e instructions -e cycles ./phonebook_opt
+	sudo perf stat -r 10 -e cache-misses -e cache-references -e instructions -e cycles ./phonebook_opt
 clean:
 	$(RM) $(EXEC) *.o perf.*

@@ -45,4 +45,3 @@ void addnull(char *line)
     line[i - 1] = '\0';
     return;
 }
-

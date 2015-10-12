@@ -4,15 +4,27 @@
 #include "phonebook_opt.h"
 
 /* FILL YOUR OWN IMPLEMENTATION HERE! */
-entry *findName(char lastName[], entry *e)
+static inline uint32_t hashIndex(char lastName[])
 {
+    unsigned int hashValue = 0;
+    while(*lastName != '\0' && *lastName != '\n') {
+        hashValue = (hashValue) + (*lastName++);
+    }
+	if(*lastName == '\n')
+		*lastName = '\0';
+    return hashValue % HASH_TABLE_SIZE;
+}
+
+entry *findName(char lastName[], HashTable *ht)
+{
+	int index = hashIndex(lastName);
+	entry *e = ht[index].head; 
     while (e != NULL) {
         if (strcasecmp(lastName, e->lastName) == 0) {
-            return e;
+			return e;
         }
         e = e->pNext;
     }
-
     return NULL;
 }
 
@@ -34,19 +46,3 @@ entry *append(char lastName[], HashTable *ht)
         return ht[index].tail;
     }
 }
-
-uint16_t hashIndex(char *lastName)
-{
-    unsigned int hashValue  = 1;
-    while(*lastName != '\0') {
-        if(*lastName == '\n') {
-            *lastName = '\0';
-            lastName++;
-            continue;
-        }
-        hashValue = (hashValue) + ( *lastName++);
-        //hashValue = (hashValue << 5 )  + *lastName++;
-    }
-    return hashValue % HASH_TABLE_SIZE;
-}
-
