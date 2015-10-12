@@ -10,18 +10,18 @@ static inline uint32_t hashIndex(char lastName[])
     while(*lastName != '\0' && *lastName != '\n') {
         hashValue = (hashValue) + (*lastName++);
     }
-	if(*lastName == '\n')
-		*lastName = '\0';
+    if(*lastName == '\n')
+        *lastName = '\0';
     return hashValue % HASH_TABLE_SIZE;
 }
 
 entry *findName(char lastName[], HashTable *ht)
 {
-	int index = hashIndex(lastName);
-	entry *e = ht[index].head; 
+    int index = hashIndex(lastName);
+    entry *e = ht[index].head;
     while (e != NULL) {
         if (strcasecmp(lastName, e->lastName) == 0) {
-			return e;
+            return e;
         }
         e = e->pNext;
     }
