@@ -1,48 +1,63 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <assert.h>
+
+#include "smaz.h"
 #include "phonebook_opt.h"
 
-/* FILL YOUR OWN IMPLEMENTATION HERE! */
-static inline uint32_t hashIndex(char lastName[])
+/* compress lastName version */
+entry *findName(char lastname[], entry *pHead)
 {
-    unsigned int hashValue = 0;
-    while(*lastName != '\0' && *lastName != '\n') {
-        hashValue = (hashValue) + (*lastName++);
-    }
-    if(*lastName == '\n')
-        *lastName = '\0';
-    return hashValue % HASH_TABLE_SIZE;
-}
-
-entry *findName(char lastName[], HashTable *ht)
-{
-    int index = hashIndex(lastName);
-    entry *e = ht[index].head;
-    while (e != NULL) {
-        if (strcasecmp(lastName, e->lastName) == 0) {
-            return e;
-        }
-        e = e->pNext;
+	char dest[100];
+	int decomprlen = 0;
+    while (pHead != NULL) {
+		decomprlen = smaz_decompress(pHead->comprData,pHead->comprlen,dest,sizeof(dest));
+		dest[decomprlen] = '\0';
+		if (strcasecmp(lastname, dest) == 0)
+		  	return pHead;
+        pHead = pHead->pNext;
     }
     return NULL;
 }
 
-entry *append(char lastName[], HashTable *ht)
+entry *append(char lastName[], entry *e)
 {
-    int index = hashIndex(lastName);
-    if(ht[index].flag == 0) {
-        ht[index].head = (entry *)malloc(sizeof(entry));
-        strcpy(ht[index].head->lastName,lastName);
-        ht[index].head->pNext = NULL;
-        ht[index].tail = ht[index].head;
-        ht[index].flag = 1;
-        return ht[index].head;
-    } else {
-        ht[index].tail->pNext = (entry *) malloc(sizeof(entry));
-        ht[index].tail = ht[index].tail->pNext;
-        strcpy(ht[index].tail->lastName, lastName);
-        ht[index].tail->pNext = NULL;
-        return ht[index].tail;
-    }
+	char out[4096];
+	char d[4096];
+	int comprlen,decomprlen;
+	int length;
+    /* allocate memory for the new entry and put lastName */
+    e->pNext = (entry *) malloc(sizeof(entry));
+    e = e->pNext;
+    length = addnull(lastName);
+	/* compress the lastName */
+	comprlen = smaz_compress(lastName,length,out,sizeof(out));
+	assert(length != (unsigned)(decomprlen = smaz_decompress(out,comprlen,d,sizeof(d) && "Error compressing")));
+	assert(memcmp(lastName,d,decomprlen));
+	e->comprlen = comprlen;
+	e->comprData = malloc(comprlen * sizeof(char));
+	strcpy(e->comprData,out); 
+    e->pNext = NULL;
+
+    return e;
+}
+
+entry *initialize(entry *pHead)
+{
+    pHead = (entry*) malloc(sizeof(entry));
+    printf("size of entry : %lu bytes\n", sizeof(entry));
+    pHead->pNext = NULL;
+    return pHead;
+}
+
+//replace \n with \0
+int addnull(char *line)
+{
+    int i = 0;
+    while (line[i] != '\0')
+        i++;
+    line[i - 1] = '\0';
+    return i-1;
 }
