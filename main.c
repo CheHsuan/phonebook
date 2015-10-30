@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <assert.h>
-#include<unistd.h>
+#include <unistd.h>
 
 #include IMPL
 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 #if defined(_PHONEBOOK_OPT_H)
     HashTable ht[HASH_TABLE_SIZE];
 #else
-    entry *pHead, *e;
+    entry *pHead = NULL, *e = NULL;
     pHead = initialize(pHead);
     e = pHead;
 #if defined(__GNUC__)
