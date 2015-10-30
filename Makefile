@@ -10,9 +10,9 @@ phonebook_orig: $(SRCS_common) phonebook_orig.c phonebook_orig.h
 	$(CC) $(CFLAGS_common) -DIMPL="\"$@.h\"" -o $@ \
 		$(SRCS_common) $@.c
 
-phonebook_opt: $(SRCS_common) phonebook_opt.c phonebook_opt.h
+phonebook_opt: $(SRCS_common) smaz.c smaz.h phonebook_opt.c phonebook_opt.h
 	$(CC) $(CFLAGS_common) -DIMPL="\"$@.h\"" -o $@ \
-		$(SRCS_common) $@.c
+		$(SRCS_common) smaz.c smaz.h $@.c 
 
 run1: $(EXEC)
 	watch -d -t ./phonebook_orig
