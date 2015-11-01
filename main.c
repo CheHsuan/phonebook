@@ -36,23 +36,15 @@ int main(int argc, char *argv[])
     }
 
     /* build the entry */
-#if defined(_PHONEBOOK_OPT_H)
-    HashTable ht[HASH_TABLE_SIZE];
-#else
     entry *pHead = NULL, *e = NULL;
     pHead = initialize(pHead);
     e = pHead;
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
-#endif
     clock_gettime(CLOCK_REALTIME, &start);
     while (fgets(line, sizeof(line), fp)) {
-#if defined(_PHONEBOOK_OPT_H)
-        append(line, ht);
-#else
         e = append(line, e);
-#endif
     }
 
     clock_gettime(CLOCK_REALTIME, &end);
@@ -64,24 +56,20 @@ int main(int argc, char *argv[])
     char input[MAX_LAST_NAME_SIZE] = "whiteshank";
     /* compute the execution time */
     clock_gettime(CLOCK_REALTIME, &start);
-#if defined(_PHONEBOOK_OPT_H)
-    findName(input, ht);
-#else
     e = pHead;
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
     findName(input, pHead);
-#endif
+
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time2 = diff_in_second(start, end);
 
     printf("execution time of append() : %lf sec\n", cpu_time1);
     printf("execution time of findName() : %lf sec\n", cpu_time2);
-#if defined(_PHONEBOOK_OPT_H) != 1
+
     /* FIXME: release all allocated entries */
     free(pHead);
-#endif
 
     return 0;
 }
