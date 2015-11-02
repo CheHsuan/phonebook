@@ -47,7 +47,6 @@ entry *append(char lastName[], entry *e)
 entry *initialize(entry *pHead)
 {
     pHead = (entry*) malloc(sizeof(entry));
-    printf("size of entry : %lu bytes\n", sizeof(entry));
     pHead->pNext = NULL;
     return pHead;
 }
