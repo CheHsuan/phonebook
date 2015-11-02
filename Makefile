@@ -8,11 +8,11 @@ SRCS_common = main.c
 
 phonebook_orig: $(SRCS_common) phonebook_orig.c phonebook_orig.h
 	$(CC) $(CFLAGS_common) -DIMPL="\"$@.h\"" -o $@ \
-		$(SRCS_common) $@.c
+		$(SRCS_common) $@.c -lpthread
 
 phonebook_opt: $(SRCS_common) smaz.c smaz.h phonebook_opt.c phonebook_opt.h
 	$(CC) $(CFLAGS_common) -DIMPL="\"$@.h\"" -o $@ \
-		$(SRCS_common) smaz.c smaz.h $@.c 
+		$(SRCS_common) smaz.c smaz.h $@.c -lpthread
 
 run1: $(EXEC)
 	watch -d -t ./phonebook_orig
